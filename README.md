@@ -257,3 +257,32 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: any }) {
 ```
+
+### Static Site Generation (SSG)
+
+1. Edit next.config.mjs
+```mjs
+output: "export"
+```
+```mjs
+const nextConfig = {      
+      output: "export"
+};
+
+```
+2. Build 
+```npm
+ npm run build
+```
+
+## Partial Pre-Rendering (PPR)
+> A whole new way of rendering
+
+> Mix of static and dynamic
+> 
+> [!WARNING]
+> It's not ready yet in next js documentation
+
+## Caching in Next.js
+
+
