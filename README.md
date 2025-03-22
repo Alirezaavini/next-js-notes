@@ -144,3 +144,15 @@ async function CabinList() {
 export default CabinList;
 ```
 
+## Dynamic routes
+1. Make a folder with [id] template 
+
+2. Link to it like bellow
+   ```tsx
+    <Link
+         href={`/cabins/${id}`}>
+         Details & reservation &rarr;
+    </Link>
+   ```
+   -- image
+
