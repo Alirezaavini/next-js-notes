@@ -144,7 +144,7 @@ async function CabinList() {
 export default CabinList;
 ```
 
-## Dynamic routes
+## Dynamic Routes
 1. Make a folder with [id] template 
 
 ![Demo Image](assets/images/dynamic-route-1.jpg)
@@ -156,5 +156,104 @@ export default CabinList;
          Details & reservation &rarr;
     </Link>
    ```
-   
+3. Get Params
+```tsx
+export default function Page({ params }: { params: any }) {
+ const cabin = await getCabin(params.cabinId);
+}
+```
+## Dynamic Metadata
+```tsx
+import { getCabin } from '@/app/_lib/data-service';
 
+export async function generateMetadata({ params }: { params: any }) {
+    const { name } = await getCabin(params.cabinId);
+    return { title: `Cabin ${name}` };
+}
+
+export default async function Page({ params }: { params: any }) {
+
+```
+## Error Boundary
+
+### Client Errors
+
+1. Create error page in app route like bellow
+
+```tsx
+'use client';
+
+export default function Error({ error, reset }: { error: any; reset: any }) {
+    console.log('error =====> ', error);
+
+    return (
+        <main className="flex justify-center items-center flex-col gap-6">
+            <h1 className="text-3xl font-semibold">Something went wrong!</h1>
+            <p className="text-lg">{error.message}</p>
+
+            <button className="inline-block bg-accent-500 text-primary-800 px-6 py-3 text-lg" onClick={reset}>
+                Try again
+            </button>
+        </main>
+    );
+}
+
+```
+
+### NotFound Error
+1. Create not found page in app route like bellow
+```tsx
+import Link from 'next/link';
+
+function NotFound() {
+    return (
+        <main className="text-center space-y-6 mt-4">
+            <h1 className="text-3xl font-semibold">This page could not be found :(</h1>
+            <Link href="/" className="inline-block bg-accent-500 text-primary-800 px-6 py-3 text-lg">
+                Go back home
+            </Link>
+        </main>
+    );
+}
+
+export default NotFound;
+
+```
+
+### Handle NotFound Error Manaully
+
+```tsx
+try {
+const res = await fetch(`${API_URL}/get-cabin?id=${id}`, { agent });
+
+// Check if the HTTP response is successful (status 200-299)
+if (!res.ok) {
+  throw new Error(`HTTP error! Status: ${res.status}`);
+ }
+
+// Parse the JSON response
+const data = await res.json();
+if (!data) notFound();
+return data;
+} catch (error) {
+    // Handle errors here (e.g., log, rethrow, etc.)
+    console.error("Error fetching data:", error.message);
+    throw error; // Optional: Propagate the error up
+  }
+```
+
+## Dynamic And Static Pages
+
+### Make Dynamic Pages Static
+```tsx
+
+export async function generateStaticParams() {
+    const cabins = await getCabins();
+    const ids = cabins.map((cabin: { id: number }) => ({
+        cabinId: String(cabin.id),
+    }));
+    return ids;
+}
+
+export default async function Page({ params }: { params: any }) {
+```
