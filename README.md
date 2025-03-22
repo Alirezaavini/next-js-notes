@@ -147,6 +147,8 @@ export default CabinList;
 ## Dynamic routes
 1. Make a folder with [id] template 
 
+![Demo Image](assets/images/dynamic-route-1.jpg)
+
 2. Link to it like bellow
    ```tsx
     <Link
@@ -154,5 +156,5 @@ export default CabinList;
          Details & reservation &rarr;
     </Link>
    ```
-   -- image
+   
 
