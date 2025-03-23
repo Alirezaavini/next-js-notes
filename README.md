@@ -1,5 +1,5 @@
 # Next JS
- This patch all is about tricks and notes about next js.
+
 
 ### How to install 
 ```
