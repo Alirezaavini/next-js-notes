@@ -147,7 +147,7 @@ export default CabinList;
 ## Dynamic Routes
 1. Make a folder with [id] template 
 
-![Demo Image](assets/images/dynamic-route-1.jpg)
+![dynamic_route](assets/images/dynamic-route-1.jpg)
 
 2. Link to it like bellow
    ```tsx
@@ -279,10 +279,41 @@ const nextConfig = {
 > A whole new way of rendering
 
 > Mix of static and dynamic
-> 
+
 > [!WARNING]
 > It's not ready yet in next js documentation
 
 ## Caching in Next.js
 
+![caching_in_next_js](assets/images/caching-1.jpg)
 
+![caching_in_next_js_2](assets/images/caching-2.jpg)
+
+### Force To Be Dynamic
+
+```tsx
+export const revalidate = 0; // turn off caching
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const metadata = {
+    title: 'Cabins',
+};
+
+export default async function Cabins() {
+```
+
+### ISR 
+
+For once per hour
+```tsx
+export const revalidate = 3600; // turn off caching in seconds
+```
+
+### Cmponent Level Caching
+```tsx
+import { unstable_noStore as noStore } from 'next/cache';
+
+async function CabinList() {
+    noStore();
+
+```
