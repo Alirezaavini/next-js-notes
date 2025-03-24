@@ -317,3 +317,17 @@ async function CabinList() {
     noStore();
 
 ```
+
+## Client And Server Interactions
+
+![caching_in_next_js](assets/images/server-client-boundary-1.jpg)
+
+### Importing And Rendering Rules:
+
+![caching_in_next_js](assets/images/server-client-boundary-2.jpg)
+
+> [!IMPORTANT]
+> Look C component, somewhere it's **Server Component** and other way it's **Client Component**
+
+
+
