@@ -329,5 +329,29 @@ async function CabinList() {
 > [!IMPORTANT]
 > Look C component, somewhere it's **Server Component** and other way it's **Client Component**
 
+## Url Params
+
+### Get Url Params
+
+```tsx
+export default async function Cabins({ searchParams }: { searchParams: any }) {
+    console.log(searchParams);
+    const filter = searchParams?.capacity ?? 'all';
+```
+
+### Change Url 
+
+```tsx
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathName = usePathname();
+
+    function handleFilter(filter: string) {            
+        const params = new URLSearchParams(searchParams);
+        params.set('capacity', filter);
+        router.replace(`${pathName}?${params.toString()}`, { scroll: false });
+    }
+```
+
 
 
