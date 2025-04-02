@@ -353,5 +353,49 @@ export default async function Cabins({ searchParams }: { searchParams: any }) {
     }
 ```
 
+## Client And Server Interactoins
 
+### Multi Fetch Request In One Page
+```tsx
+ const settings = await getSettings();
+ const bookedDates = await getBookedDatesByCabinId(params.cabinId);
+```
+
+<b> We can use Promise.all </b>
+
+```tsx
+const [cabin, settings, bookedDates] = await Promise.all([
+        getCabin(params.cabinId),
+        getSettings(),
+        getBookedDatesByCabinId(params.cabinId),
+    ]);
+
+```
+<b> Better way is make some other components </b>
+```tsx
+ <Suspense fallback={<Spinner />}>
+         <Reservation cabin={cabin} />
+ </Suspense>
+```
+
+```tsx
+import { getBookedDatesByCabinId, getSettings } from '../_lib/data-service';
+import DateSelector from './DateSelector';
+import ReservationForm from './ReservationForm';
+
+async function Reservation({ cabin }: { cabin: any }) {
+    const [settings, bookedDates] = await Promise.all([getSettings(), getBookedDatesByCabinId(cabin.id)]);
+
+    return (
+        <div className="grid grid-cols-2 border border-x-primary-800 min-h-[400px] mb-10">
+            <DateSelector settings={settings} bookedDates={bookedDates} cabin={cabin} />
+            <ReservationForm cabin={cabin} />
+        </div>
+    );
+}
+
+export default Reservation;
+```
+
+### Using Context API For State Management
 
