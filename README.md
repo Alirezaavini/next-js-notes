@@ -468,7 +468,6 @@ const authConfig = {
                   clientId: process.env.AUTH_GOOGLE_ID,Client ID
                   clientSecret: process.env.AUTH_GOOGLE_SECRET
             }),
-
       ],
 }
 export const { auth, handlers: { GET, POST } } = NextAuth(authConfig);
@@ -493,4 +492,111 @@ AUTH_GOOGLE_ID="Client ID"
 AUTH_GOOGLE_SECRET="Client secret"
 ```
 
+### Protect Routes With Next Auth Middleware
+
+1. Create a middleware in route folder (not in app folder)
+
+```ts
+
+import { auth } from '@/app/_lib/auth';
+
+export const middleware = auth;
+
+export const config = {
+    matcher: ['/account'],
+};
+```
+
+2. Modigy authConfig to customize sign in page and callbacks
+
+```js
+const authConfig = {
+      providers: [
+            Google({
+                  clientId: process.env.AUTH_GOOGLE_ID,
+                  clientSecret: process.env.AUTH_GOOGLE_SECRET
+            }),
+
+      ],
+      callbacks: {
+            authorized({ auth, request }) { //when user goes to matcher routes which we set in middleware.ts it will be executed
+                  //auth : current session
+                  return !!auth?.user;
+            }
+      },
+      pages: {
+            signIn: "/login"
+      }
+}
+
+export const { auth,
+      signIn,
+      signOut,
+      handlers: { GET, POST } } = NextAuth(authConfig);
+```js
+
+3. Create action.ts to customize sign in
+
+
+```ts
+'use server';
+import { signIn } from './auth';
+
+export async function signInAction() {
+    await signIn('google', { redirectTo: '/account' }); //one of the provider
+}
+```
+4. Use SignInAction
+
+```tsx
+import { signInAction } from '../_lib/actions';
+
+function SignInButton() {
+    return (
+        <form action={signInAction}>
+            <button className="flex items-center gap-6 text-lg border border-primary-300 px-10 py-4 font-medium">
+                <img src="https://authjs.dev/img/providers/google.svg" alt="Google logo" height="24" width="24" />
+                <span>Continue with Google</span>
+            </button>
+        </form>
+    );
+}
+
+export default SignInButton;
+```
+
+### Create User When Users SignIn In Next Auth 
+
+1. Add signIn Callback:
+```js
+ callbacks: {
+            authorized({ auth, request }) {                  
+                  return !!auth?.user;
+            },
+           async signIn({ user, account, profile }) {
+                  try {
+                        const existingGuest = await getGuest(user.email);
+                        if (!existingGuest) {
+                              await createGuest({ email: user.email, fullName: user.name })
+                        } else {
+
+                        }
+
+                        return true;
+                  } catch {
+                        return false
+                  }
+            },
+      },
+```
+
+### Add More info to session
+For doing that modeify auth.js and add new callback:
+```js
+async session(session, user) {
+                  const guest = getGuest(session.user.email);
+                  session.user.guestId = guest.id;
+                  return session;
+            }            
+```
 
