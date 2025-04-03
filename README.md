@@ -397,5 +397,100 @@ async function Reservation({ cabin }: { cabin: any }) {
 export default Reservation;
 ```
 
-### Using Context API For State Management
+## Using Context API For State Management
+
+1. Create Context:
+
+```tsx
+'use client';
+
+import { createContext, ReactNode, useContext, useState } from 'react';
+
+const initialState = { from: undefined, to: undefined };
+
+const ReservationContext = createContext({});
+
+function ReservationProvider({ children }: { children: ReactNode }) {
+    const [range, setRange] = useState(initialState);
+    const resetRange = () => setRange(initialState);
+    return <ReservationContext.Provider value={{ range, setRange, resetRange }}>{children}</ReservationContext.Provider>;
+}
+
+function useReservation() {
+    const context = useContext(ReservationContext);
+
+    if (context === undefined) throw new Error('');
+    return context;
+}
+
+export { ReservationProvider, useReservation };
+
+```
+2. Use Context Provider
+```tsx
+import { ReservationProvider } from './_components/ReservationContext';
+
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <html lang="en">
+            <body className={`relative flex flex-col bg-primary-950 text-primary-100 min-h-screen ${josefin.className}`}>
+                <Header />
+                <div className="flex-1 px-8 py-12 grid">
+                    <main className="max-w-7xl mx-auto w-full">
+                        <ReservationProvider>{children}</ReservationProvider>
+                    </main>
+                </div>
+            </body>
+        </html>
+    );
+}
+```
+
+3. Use Context
+```tsx
+const { range, resetRange } = useReservation();
+```
+
+## Next Auth
+
+1. Make a config file in _lib folder
+
+> This sample is about google
+
+```tsx
+import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
+
+const authConfig = {
+      providers: [
+            Google({
+                  clientId: process.env.AUTH_GOOGLE_ID,Client ID
+                  clientSecret: process.env.AUTH_GOOGLE_SECRET
+            }),
+
+      ],
+}
+export const { auth, handlers: { GET, POST } } = NextAuth(authConfig);
+```
+2. Make a file in api/auth/[...nextauth] folder with foute.ts name
+
+```tsx
+export { GET, POST } from '@/app/_lib/auth';
+```
+
+3. Get google id from google cloud console
+[https://console.cloud.google.com/cloud-resource-manager](https://console.cloud.google.com/apis/dashboard?)
+
+Client secret = AUTH_GOOGLE_SECRET
+
+4. Add varibales in .env file
+
+```env
+NEXTAUTH_URL=http://localhost:3000/
+NEXTAUTH_SECRET="any key"
+AUTH_GOOGLE_ID="Client ID"
+AUTH_GOOGLE_SECRET="Client secret"
+```
+
 
