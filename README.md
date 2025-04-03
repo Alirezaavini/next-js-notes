@@ -602,4 +602,12 @@ async session(session, user) {
 
 ## Server Actions
 
+> [!TIP]
+> Server actions will make endpoint automaticly
+
+![dynamic_route](assets/images/server actions -1.jpg)
+
+![dynamic_route](assets/images/server actions -2.jpg)
+
+![dynamic_route](assets/images/server actions -3.jpg)
 
