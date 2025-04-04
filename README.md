@@ -611,3 +611,16 @@ async session(session, user) {
 
 ![dynamic_route](assets/images/server%20actions%20-3.jpg)
 
+### Clear Catch Manually
+
+```ts
+ revalidatePath('/account');
+```
+
+### UseFormtatus
+
+<b>Only works inside of a form</b>
+
+
+
+```
