@@ -631,7 +631,7 @@ async session(session, user) {
 ```ts
  startTransition(() => deleteReservation(bookingId))
 ```
-3. Use usePending
+3. Use isPending
 ```tsx
  {!isPending ?
         <>
