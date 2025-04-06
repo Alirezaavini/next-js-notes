@@ -621,6 +621,23 @@ async session(session, user) {
 
 <b>Only works inside of a form</b>
 
+### Use Transition Hook
 
-
+1. Define Transition
+```ts
+ const [isPending, startTransition] = useTransition();
+```
+2. Start Transition
+```ts
+ startTransition(() => deleteReservation(bookingId))
+```
+3. Use usePending
+```tsx
+ {!isPending ?
+        <>
+          <TrashIcon className='h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors' />
+          <span className='mt-1'>Delete</span>
+        </>
+        : <span className='mx-auto'><SpinnerMini /></span>
+}
 ```
