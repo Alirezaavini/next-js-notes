@@ -641,3 +641,15 @@ async session(session, user) {
         : <span className='mx-auto'><SpinnerMini /></span>
 }
 ```
+
+## Optimistic UI
+
+```tsx
+import { useOptimistic } from 'react';
+
+const [optimisticBookings, optimisticDelete] = useOptimistic(bookings, (currentBookings, bookingId) => {
+     return currentBookings.filter((b: any) => b.id !== bookingId);
+});
+
+optimisticDelete(bookingId);
+```
